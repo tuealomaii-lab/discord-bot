@@ -1,0 +1,43 @@
+const { Client, GatewayIntentBits } = require('discord.js');
+const { joinVoiceChannel } = require('@discordjs/voice');
+
+const TOKEN = process.env.TOKEN;
+
+const GUILD_ID = '1487744529590128743';
+const CHANNEL_ID = '1487830503213105333';
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildVoiceStates
+  ]
+});
+
+client.once('ready', async () => {
+  console.log("Bot is online");
+
+  const guild = await client.guilds.fetch(GUILD_ID);
+
+  joinVoiceChannel({
+    channelId: CHANNEL_ID,
+    guildId: guild.id,
+    adapterCreator: guild.voiceAdapterCreator,
+    selfMute: false,
+    selfDeaf: true,
+  });
+
+  console.log("Joined voice channel");
+});
+
+client.login(TOKEN);
+
+const express = require("express");
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Bot is running");
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server is running");
+});
